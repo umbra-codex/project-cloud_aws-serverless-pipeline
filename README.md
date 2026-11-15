@@ -2,15 +2,20 @@
 
 [![ci](https://github.com/umbra-codex/project-cloud_serverless-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/umbra-codex/project-cloud_serverless-pipeline/actions/workflows/ci.yml)
 
-One S3 object becomes one SQS message and then one DynamoDB row. I built it on AWS with OpenTofu, two Node 24 Lambdas, and a GitHub Actions workflow that plans every pull request and every push to `main`, then ported the same design to a Compose stack with Redis Streams, a worker, and Postgres on my homelab. The AWS stack ran from 2026-11-07 to 2026-11-14, and its evidence is in `evidence/`. I run the Compose stack on demand.
+One S3 object becomes one SQS message and then one DynamoDB row. I built it on AWS with OpenTofu, two Node 24 Lambdas, and a GitHub Actions workflow that plans every pull request and every push to `main`, then ported the same design to a Compose stack with Redis Streams, a worker, and Postgres on my homelab. I run the Compose stack on demand.
+
+What proves it: the [green CI run](https://github.com/umbra-codex/project-cloud_serverless-pipeline/actions/runs/42747746965), a 63-second [capture of the failure drill](https://github.com/umbra-codex/project-cloud_serverless-pipeline/releases/tag/drill-capture), and a 1,000-event benchmark on both runtimes.
+
+The trade-offs are in [Decisions](#decisions).
 
 ## What this is
 
 Both versions ran the same 1,000 events. The benchmark section says where that comparison holds and where it does not.
 
-On AWS it is S3, two Lambda functions on `nodejs24.x`, an SQS queue with a dead-letter queue, and a DynamoDB table. I destroyed it on 2026-11-14, and `scripts/check-destroyed.sh`, which I ran afterward, confirmed that nothing with the project's prefix was left in the account.
+On AWS it is S3, two Lambda functions on `nodejs24.x`, an SQS queue with a dead-letter queue, and a DynamoDB table. It ran from 2026-11-07 to 2026-11-14, and its evidence is in `evidence/`.
 
 On my homelab, a machine named Seshat running Podman, it is an ingest service, a Redis Stream with a consumer group, a worker, Postgres, and a read-only status service published through a Cloudflare Tunnel. I start it on demand, not around the clock.
+
 ## Architecture
 
 Solid arrows are the flow, and dotted arrows are failures and returns. The AWS version:
@@ -66,6 +71,13 @@ Compose keeps the same steps with different parts: a Redis Stream for the queue,
 Sources: `evidence/bench-aws-summary.txt`, `evidence/bench-compose-summary.txt`, and `evidence/cost-explorer.txt`. The AWS cost covers 2026-11-07 to 2026-11-14 and leaves out other services in the same account.
 
 The AWS latency includes the wait in the queue. Rows arrived over about 40 seconds, because the first uploads were already queued when polling started and the consumer was draining a backlog. The likely cause is a concurrency cap, either the mapping's 2 or the reservation of 5 on each function. I did not read the throttle metric for either, so the cause is unconfirmed. The Compose requests were sent one at a time, so its figures are a floor and the columns are not a fair race.
+
+## Proof it works
+
+- the [green CI run](https://github.com/umbra-codex/project-cloud_serverless-pipeline/actions/runs/42747746965) that finished the work, including its `static` job
+- the [failure drill capture](https://github.com/umbra-codex/project-cloud_serverless-pipeline/releases/tag/drill-capture), a Release asset: 63 seconds against the project's target of 60 to 90, edited from two takes, with the waits sped up and labeled on screen
+- `evidence/bench-aws-summary.txt` and `evidence/bench-compose-summary.txt`, the p50 and p95 above
+- [`evidence/README.md`](evidence/README.md), the index of everything captured
 
 ## IAM: the policy, and the reason for every action
 
@@ -148,16 +160,19 @@ The budget is 1 USD a month with `include_credit = false`, so a credit cannot hi
 
 In the 1,000-event burst all 1,000 rows landed and none reached the dead-letter queue, according to `evidence/sp8-throttling.txt`.
 
+## Cost and teardown
+
+The AWS stack cost 0.0080 USD over the 8 days it ran, 2026-11-07 to 2026-11-14 (DynamoDB and S3, credits excluded), according to `evidence/cost-explorer.txt`. I destroyed it on 2026-11-14, which removed 19 resources (`evidence/destroy.log`), and `scripts/check-destroyed.sh`, which I ran afterward, confirmed that nothing with the project's prefix was left in the account. The Compose stack costs no cloud spend and stops with `podman compose down`.
+
 ## What you can verify yourself
 
+Checkable in this repository:
+
 - the CI badge at the top and the [workflow page](https://github.com/umbra-codex/project-cloud_serverless-pipeline/actions/workflows/ci.yml)
-- the [green run that finished the work](https://github.com/umbra-codex/project-cloud_serverless-pipeline/actions/runs/42747746965), including its `static` job
 - the OIDC trust policy in `terraform/bootstrap/oidc.tf`, which names one repository and two contexts
-- the index of everything captured in [`evidence/README.md`](evidence/README.md)
 
-Captured from the AWS run:
+Captured evidence you have to trust:
 
-- the [failure drill capture](https://github.com/umbra-codex/project-cloud_serverless-pipeline/releases/tag/drill-capture), a Release asset. It runs 63 seconds against the project's target of 60 to 90, and it is edited from two takes, with the waits sped up and labeled on screen.
 - `evidence/destroy.log`, the output of the destroy, and `scripts/check-destroyed.sh`, which I ran against the account afterward
 - `evidence/cost-explorer.txt`, the Cost Explorer readings behind the cost figure
 - `evidence/bench-aws-latencies.txt` and `evidence/bench-compose-latencies.txt`, the 1,000 latencies each p50 and p95 come from, and `evidence/bench-aws-raw.json`, the DynamoDB scan the AWS latencies were read from
@@ -178,16 +193,20 @@ Captured from the AWS run:
 
 ## Run it yourself
 
-The Compose stack runs on Podman and needs a Cloudflare Tunnel token.
+The Compose stack runs on Podman. To start the services that need no Cloudflare account:
 
 ```bash
-export TUNNEL_TOKEN=<your tunnel token>
 mkdir -p secrets
 openssl rand -base64 24 > secrets/pg_password
-podman compose up -d --build
+podman compose up -d --build redis postgres ingest worker status
+curl -s -o /dev/null -w '%{http_code}\n' -X POST localhost:8081 -H 'content-type: application/json' -d '{"idempotencyKey":"local-1"}'
 podman compose ps
 ```
 
-`secrets/` is in `.gitignore`, so git never tracks the password. Tear the stack down with `podman compose down`.
+The POST prints `202`. `secrets/` is in `.gitignore`, so git never tracks the password. The full `podman compose up -d --build` also starts the tunnel and needs `TUNNEL_TOKEN` set to a Cloudflare Tunnel token. Stop everything with `podman compose down`.
 
 `terraform/` is the record of the AWS run, so this README does not walk through applying it. I only ran OpenTofu and Podman.
+
+## License
+
+MIT, see [LICENSE](LICENSE).
