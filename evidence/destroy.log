@@ -1,0 +1,787 @@
+data.archive_file.consumer: Reading...
+data.archive_file.ingest: Reading...
+data.archive_file.consumer: Read complete after 0s [id=cb0cf3e8a08d05da3b39d1a022bd1f6f845e5853]
+data.archive_file.ingest: Read complete after 0s [id=b441a05580262c92330f7e40cb213329ae57fc39]
+data.aws_iam_policy_document.lambda_assume: Reading...
+data.aws_caller_identity.current: Reading...
+aws_cloudwatch_log_group.consumer: Refreshing state... [id=/aws/lambda/serverless-pipeline-consumer]
+aws_cloudwatch_log_group.ingest: Refreshing state... [id=/aws/lambda/serverless-pipeline-ingest]
+aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-dlq]
+aws_dynamodb_table.events: Refreshing state... [id=serverless-pipeline-events]
+data.aws_iam_policy_document.lambda_assume: Read complete after 0s [id=2690255455]
+aws_budgets_budget.guard: Refreshing state... [id=788516091144:serverless-pipeline-guard]
+aws_iam_role.ingest: Refreshing state... [id=serverless-pipeline-ingest]
+aws_iam_role.consumer: Refreshing state... [id=serverless-pipeline-consumer]
+data.aws_caller_identity.current: Read complete after 0s [id=788516091144]
+aws_s3_bucket.landing: Refreshing state... [id=serverless-pipeline-landing-788516091144]
+aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-main]
+aws_lambda_function.ingest: Refreshing state... [id=serverless-pipeline-ingest]
+data.aws_iam_policy_document.consumer_permissions: Reading...
+data.aws_iam_policy_document.consumer_permissions: Read complete after 0s [id=1096900451]
+aws_iam_role_policy.consumer: Refreshing state... [id=serverless-pipeline-consumer:serverless-pipeline-consumer]
+aws_lambda_function.consumer: Refreshing state... [id=serverless-pipeline-consumer]
+aws_s3_bucket_public_access_block.landing: Refreshing state... [id=serverless-pipeline-landing-788516091144]
+aws_lambda_permission.s3_invoke: Refreshing state... [id=AllowS3Invoke]
+data.aws_iam_policy_document.ingest_permissions: Reading...
+aws_s3_bucket_versioning.landing: Refreshing state... [id=serverless-pipeline-landing-788516091144]
+aws_s3_bucket_server_side_encryption_configuration.landing: Refreshing state... [id=serverless-pipeline-landing-788516091144]
+data.aws_iam_policy_document.ingest_permissions: Read complete after 0s [id=2668362163]
+aws_iam_role_policy.ingest: Refreshing state... [id=serverless-pipeline-ingest:serverless-pipeline-ingest]
+aws_lambda_event_source_mapping.consumer: Refreshing state... [id=960ec0e2-772b-497d-8f69-629e9f310763]
+aws_s3_bucket_notification.landing: Refreshing state... [id=serverless-pipeline-landing-788516091144]
+
+OpenTofu used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+OpenTofu will perform the following actions:
+
+  # aws_budgets_budget.guard will be destroyed
+  - resource "aws_budgets_budget" "guard" {
+      - account_id        = "788516091144" -> null
+      - arn               = "arn:aws:budgets::788516091144:budget/serverless-pipeline-guard" -> null
+      - budget_type       = "COST" -> null
+      - id                = "788516091144:serverless-pipeline-guard" -> null
+      - limit_amount      = "1.0" -> null
+      - limit_unit        = "USD" -> null
+      - metrics           = [] -> null
+      - name              = "serverless-pipeline-guard" -> null
+      - tags              = {} -> null
+      - tags_all          = {} -> null
+      - time_period_end   = "2087-06-15_00:00" -> null
+      - time_period_start = "2026-11-01_00:00" -> null
+      - time_unit         = "MONTHLY" -> null
+
+      - cost_types {
+          - include_credit             = false -> null
+          - include_discount           = true -> null
+          - include_other_subscription = true -> null
+          - include_recurring          = true -> null
+          - include_refund             = true -> null
+          - include_subscription       = true -> null
+          - include_support            = true -> null
+          - include_tax                = true -> null
+          - include_upfront            = true -> null
+          - use_amortized              = false -> null
+          - use_blended                = false -> null
+        }
+
+      - notification {
+          - comparison_operator        = "GREATER_THAN" -> null
+          - notification_type          = "ACTUAL" -> null
+          - subscriber_email_addresses = [
+              - "umbra.codex1@gmail.com",
+            ] -> null
+          - subscriber_sns_topic_arns  = [] -> null
+          - threshold                  = 80 -> null
+          - threshold_type             = "PERCENTAGE" -> null
+        }
+    }
+
+  # aws_cloudwatch_log_group.consumer will be destroyed
+  - resource "aws_cloudwatch_log_group" "consumer" {
+      - arn                         = "arn:aws:logs:us-east-1:788516091144:log-group:/aws/lambda/serverless-pipeline-consumer" -> null
+      - deletion_protection_enabled = false -> null
+      - id                          = "/aws/lambda/serverless-pipeline-consumer" -> null
+      - log_group_class             = "STANDARD" -> null
+      - name                        = "/aws/lambda/serverless-pipeline-consumer" -> null
+      - region                      = "us-east-1" -> null
+      - retention_in_days           = 14 -> null
+      - skip_destroy                = false -> null
+      - tags                        = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-consumer"
+          - "Role"      = "consumer"
+        } -> null
+      - tags_all                    = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-consumer"
+          - "Role"      = "consumer"
+        } -> null
+    }
+
+  # aws_cloudwatch_log_group.ingest will be destroyed
+  - resource "aws_cloudwatch_log_group" "ingest" {
+      - arn                         = "arn:aws:logs:us-east-1:788516091144:log-group:/aws/lambda/serverless-pipeline-ingest" -> null
+      - deletion_protection_enabled = false -> null
+      - id                          = "/aws/lambda/serverless-pipeline-ingest" -> null
+      - log_group_class             = "STANDARD" -> null
+      - name                        = "/aws/lambda/serverless-pipeline-ingest" -> null
+      - region                      = "us-east-1" -> null
+      - retention_in_days           = 14 -> null
+      - skip_destroy                = false -> null
+      - tags                        = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-ingest"
+          - "Role"      = "ingest"
+        } -> null
+      - tags_all                    = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-ingest"
+          - "Role"      = "ingest"
+        } -> null
+    }
+
+  # aws_dynamodb_table.events will be destroyed
+  - resource "aws_dynamodb_table" "events" {
+      - arn                         = "arn:aws:dynamodb:us-east-1:788516091144:table/serverless-pipeline-events" -> null
+      - billing_mode                = "PAY_PER_REQUEST" -> null
+      - deletion_protection_enabled = false -> null
+      - hash_key                    = "idempotency_key" -> null
+      - id                          = "serverless-pipeline-events" -> null
+      - name                        = "serverless-pipeline-events" -> null
+      - read_capacity               = 0 -> null
+      - region                      = "us-east-1" -> null
+      - stream_enabled              = false -> null
+      - table_class                 = "STANDARD" -> null
+      - tags                        = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-events"
+          - "Role"      = "events"
+        } -> null
+      - tags_all                    = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-events"
+          - "Role"      = "events"
+        } -> null
+      - write_capacity              = 0 -> null
+
+      - attribute {
+          - name = "idempotency_key" -> null
+          - type = "S" -> null
+        }
+
+      - point_in_time_recovery {
+          - enabled                 = true -> null
+          - recovery_period_in_days = 35 -> null
+        }
+
+      - server_side_encryption {
+          - enabled = true -> null
+        }
+
+      - ttl {
+          - enabled = false -> null
+        }
+    }
+
+  # aws_iam_role.consumer will be destroyed
+  - resource "aws_iam_role" "consumer" {
+      - arn                   = "arn:aws:iam::788516091144:role/serverless-pipeline-consumer" -> null
+      - assume_role_policy    = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "sts:AssumeRole"
+                      - Effect    = "Allow"
+                      - Principal = {
+                          - Service = "lambda.amazonaws.com"
+                        }
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - create_date           = "2026-11-07T19:38:55Z" -> null
+      - force_detach_policies = false -> null
+      - id                    = "serverless-pipeline-consumer" -> null
+      - managed_policy_arns   = [] -> null
+      - max_session_duration  = 3600 -> null
+      - name                  = "serverless-pipeline-consumer" -> null
+      - path                  = "/" -> null
+      - tags                  = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-consumer"
+          - "Role"      = "consumer"
+        } -> null
+      - tags_all              = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-consumer"
+          - "Role"      = "consumer"
+        } -> null
+      - unique_id             = "AROA3PFZYWUENCBT5UPRI" -> null
+
+      - inline_policy {
+          - name   = "serverless-pipeline-consumer" -> null
+          - policy = jsonencode(
+                {
+                  - Statement = [
+                      - {
+                          - Action   = "dynamodb:PutItem"
+                          - Effect   = "Allow"
+                          - Resource = "arn:aws:dynamodb:us-east-1:788516091144:table/serverless-pipeline-events"
+                          - Sid      = "WriteRows"
+                        },
+                      - {
+                          - Action   = [
+                              - "sqs:ReceiveMessage",
+                              - "sqs:GetQueueAttributes",
+                              - "sqs:DeleteMessage",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "arn:aws:sqs:us-east-1:788516091144:serverless-pipeline-main"
+                          - Sid      = "ReadQueue"
+                        },
+                      - {
+                          - Action   = [
+                              - "logs:PutLogEvents",
+                              - "logs:CreateLogStream",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "arn:aws:logs:us-east-1:788516091144:log-group:/aws/lambda/serverless-pipeline-consumer:*"
+                          - Sid      = "WriteLogs"
+                        },
+                    ]
+                  - Version   = "2012-10-17"
+                }
+            ) -> null
+        }
+    }
+
+  # aws_iam_role.ingest will be destroyed
+  - resource "aws_iam_role" "ingest" {
+      - arn                   = "arn:aws:iam::788516091144:role/serverless-pipeline-ingest" -> null
+      - assume_role_policy    = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "sts:AssumeRole"
+                      - Effect    = "Allow"
+                      - Principal = {
+                          - Service = "lambda.amazonaws.com"
+                        }
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - create_date           = "2026-11-07T19:38:55Z" -> null
+      - force_detach_policies = false -> null
+      - id                    = "serverless-pipeline-ingest" -> null
+      - managed_policy_arns   = [] -> null
+      - max_session_duration  = 3600 -> null
+      - name                  = "serverless-pipeline-ingest" -> null
+      - path                  = "/" -> null
+      - tags                  = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-ingest"
+          - "Role"      = "ingest"
+        } -> null
+      - tags_all              = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-ingest"
+          - "Role"      = "ingest"
+        } -> null
+      - unique_id             = "AROA3PFZYWUEOM6YIDLXO" -> null
+
+      - inline_policy {
+          - name   = "serverless-pipeline-ingest" -> null
+          - policy = jsonencode(
+                {
+                  - Statement = [
+                      - {
+                          - Action   = "s3:GetObject"
+                          - Effect   = "Allow"
+                          - Resource = "arn:aws:s3:::serverless-pipeline-landing-788516091144/*"
+                          - Sid      = "ReadLanding"
+                        },
+                      - {
+                          - Action   = "sqs:SendMessage"
+                          - Effect   = "Allow"
+                          - Resource = "arn:aws:sqs:us-east-1:788516091144:serverless-pipeline-main"
+                          - Sid      = "SendEvents"
+                        },
+                      - {
+                          - Action   = [
+                              - "logs:PutLogEvents",
+                              - "logs:CreateLogStream",
+                            ]
+                          - Effect   = "Allow"
+                          - Resource = "arn:aws:logs:us-east-1:788516091144:log-group:/aws/lambda/serverless-pipeline-ingest:*"
+                          - Sid      = "WriteLogs"
+                        },
+                    ]
+                  - Version   = "2012-10-17"
+                }
+            ) -> null
+        }
+    }
+
+  # aws_iam_role_policy.consumer will be destroyed
+  - resource "aws_iam_role_policy" "consumer" {
+      - id     = "serverless-pipeline-consumer:serverless-pipeline-consumer" -> null
+      - name   = "serverless-pipeline-consumer" -> null
+      - policy = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action   = "dynamodb:PutItem"
+                      - Effect   = "Allow"
+                      - Resource = "arn:aws:dynamodb:us-east-1:788516091144:table/serverless-pipeline-events"
+                      - Sid      = "WriteRows"
+                    },
+                  - {
+                      - Action   = [
+                          - "sqs:ReceiveMessage",
+                          - "sqs:GetQueueAttributes",
+                          - "sqs:DeleteMessage",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "arn:aws:sqs:us-east-1:788516091144:serverless-pipeline-main"
+                      - Sid      = "ReadQueue"
+                    },
+                  - {
+                      - Action   = [
+                          - "logs:PutLogEvents",
+                          - "logs:CreateLogStream",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "arn:aws:logs:us-east-1:788516091144:log-group:/aws/lambda/serverless-pipeline-consumer:*"
+                      - Sid      = "WriteLogs"
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - role   = "serverless-pipeline-consumer" -> null
+    }
+
+  # aws_iam_role_policy.ingest will be destroyed
+  - resource "aws_iam_role_policy" "ingest" {
+      - id     = "serverless-pipeline-ingest:serverless-pipeline-ingest" -> null
+      - name   = "serverless-pipeline-ingest" -> null
+      - policy = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action   = "s3:GetObject"
+                      - Effect   = "Allow"
+                      - Resource = "arn:aws:s3:::serverless-pipeline-landing-788516091144/*"
+                      - Sid      = "ReadLanding"
+                    },
+                  - {
+                      - Action   = "sqs:SendMessage"
+                      - Effect   = "Allow"
+                      - Resource = "arn:aws:sqs:us-east-1:788516091144:serverless-pipeline-main"
+                      - Sid      = "SendEvents"
+                    },
+                  - {
+                      - Action   = [
+                          - "logs:PutLogEvents",
+                          - "logs:CreateLogStream",
+                        ]
+                      - Effect   = "Allow"
+                      - Resource = "arn:aws:logs:us-east-1:788516091144:log-group:/aws/lambda/serverless-pipeline-ingest:*"
+                      - Sid      = "WriteLogs"
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - role   = "serverless-pipeline-ingest" -> null
+    }
+
+  # aws_lambda_event_source_mapping.consumer will be destroyed
+  - resource "aws_lambda_event_source_mapping" "consumer" {
+      - arn                                = "arn:aws:lambda:us-east-1:788516091144:event-source-mapping:960ec0e2-772b-497d-8f69-629e9f310763" -> null
+      - batch_size                         = 10 -> null
+      - bisect_batch_on_function_error     = false -> null
+      - enabled                            = true -> null
+      - event_source_arn                   = "arn:aws:sqs:us-east-1:788516091144:serverless-pipeline-main" -> null
+      - function_arn                       = "arn:aws:lambda:us-east-1:788516091144:function:serverless-pipeline-consumer" -> null
+      - function_name                      = "arn:aws:lambda:us-east-1:788516091144:function:serverless-pipeline-consumer" -> null
+      - function_response_types            = [
+          - "ReportBatchItemFailures",
+        ] -> null
+      - id                                 = "960ec0e2-772b-497d-8f69-629e9f310763" -> null
+      - last_modified                      = "2026-11-07T19:39:59Z" -> null
+      - maximum_batching_window_in_seconds = 0 -> null
+      - maximum_record_age_in_seconds      = 0 -> null
+      - maximum_retry_attempts             = 0 -> null
+      - parallelization_factor             = 0 -> null
+      - queues                             = [] -> null
+      - region                             = "us-east-1" -> null
+      - state                              = "Enabled" -> null
+      - state_transition_reason            = "USER_INITIATED" -> null
+      - tags                               = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-consumer-mapping"
+          - "Role"      = "consumer-mapping"
+        } -> null
+      - tags_all                           = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-consumer-mapping"
+          - "Role"      = "consumer-mapping"
+        } -> null
+      - topics                             = [] -> null
+      - tumbling_window_in_seconds         = 0 -> null
+      - uuid                               = "960ec0e2-772b-497d-8f69-629e9f310763" -> null
+
+      - scaling_config {
+          - maximum_concurrency = 2 -> null
+        }
+    }
+
+  # aws_lambda_function.consumer will be destroyed
+  - resource "aws_lambda_function" "consumer" {
+      - architectures                  = [
+          - "arm64",
+        ] -> null
+      - arn                            = "arn:aws:lambda:us-east-1:788516091144:function:serverless-pipeline-consumer" -> null
+      - code_sha256                    = "z5wfJnXuVSMBmSNNl7Ao6G71GfFm8tyd72yPcWKR7g4=" -> null
+      - filename                       = "./build/consumer.zip" -> null
+      - function_name                  = "serverless-pipeline-consumer" -> null
+      - handler                        = "index.handler" -> null
+      - id                             = "serverless-pipeline-consumer" -> null
+      - invoke_arn                     = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:788516091144:function:serverless-pipeline-consumer/invocations" -> null
+      - last_modified                  = "2026-11-07T19:39:53.393+0000" -> null
+      - layers                         = [] -> null
+      - memory_size                    = 256 -> null
+      - package_type                   = "Zip" -> null
+      - publish                        = false -> null
+      - qualified_arn                  = "arn:aws:lambda:us-east-1:788516091144:function:serverless-pipeline-consumer:$LATEST" -> null
+      - qualified_invoke_arn           = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:788516091144:function:serverless-pipeline-consumer:$LATEST/invocations" -> null
+      - region                         = "us-east-1" -> null
+      - reserved_concurrent_executions = 5 -> null
+      - response_streaming_invoke_arn  = "arn:aws:apigateway:us-east-1:lambda:path/2021-11-15/functions/arn:aws:lambda:us-east-1:788516091144:function:serverless-pipeline-consumer/response-streaming-invocations" -> null
+      - role                           = "arn:aws:iam::788516091144:role/serverless-pipeline-consumer" -> null
+      - runtime                        = "nodejs24.x" -> null
+      - skip_destroy                   = false -> null
+      - source_code_hash               = "z5wfJnXuVSMBmSNNl7Ao6G71GfFm8tyd72yPcWKR7g4=" -> null
+      - source_code_size               = 1287 -> null
+      - tags                           = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-consumer"
+          - "Role"      = "consumer"
+        } -> null
+      - tags_all                       = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-consumer"
+          - "Role"      = "consumer"
+        } -> null
+      - timeout                        = 30 -> null
+      - version                        = "$LATEST" -> null
+
+      - environment {
+          - variables = {
+              - "TABLE_NAME" = "serverless-pipeline-events"
+            } -> null
+        }
+
+      - ephemeral_storage {
+          - size = 512 -> null
+        }
+
+      - logging_config {
+          - application_log_level = "INFO" -> null
+          - log_format            = "JSON" -> null
+          - log_group             = "/aws/lambda/serverless-pipeline-consumer" -> null
+          - system_log_level      = "INFO" -> null
+        }
+
+      - tracing_config {
+          - mode = "PassThrough" -> null
+        }
+    }
+
+  # aws_lambda_function.ingest will be destroyed
+  - resource "aws_lambda_function" "ingest" {
+      - architectures                  = [
+          - "arm64",
+        ] -> null
+      - arn                            = "arn:aws:lambda:us-east-1:788516091144:function:serverless-pipeline-ingest" -> null
+      - code_sha256                    = "sF2rrV0beu71yyUuVaLxhGrsMKeXgZegjrhbt7QdfUw=" -> null
+      - filename                       = "./build/ingest.zip" -> null
+      - function_name                  = "serverless-pipeline-ingest" -> null
+      - handler                        = "index.handler" -> null
+      - id                             = "serverless-pipeline-ingest" -> null
+      - invoke_arn                     = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:788516091144:function:serverless-pipeline-ingest/invocations" -> null
+      - last_modified                  = "2026-11-07T19:39:47.029+0000" -> null
+      - layers                         = [] -> null
+      - memory_size                    = 256 -> null
+      - package_type                   = "Zip" -> null
+      - publish                        = false -> null
+      - qualified_arn                  = "arn:aws:lambda:us-east-1:788516091144:function:serverless-pipeline-ingest:$LATEST" -> null
+      - qualified_invoke_arn           = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:788516091144:function:serverless-pipeline-ingest:$LATEST/invocations" -> null
+      - region                         = "us-east-1" -> null
+      - reserved_concurrent_executions = 5 -> null
+      - response_streaming_invoke_arn  = "arn:aws:apigateway:us-east-1:lambda:path/2021-11-15/functions/arn:aws:lambda:us-east-1:788516091144:function:serverless-pipeline-ingest/response-streaming-invocations" -> null
+      - role                           = "arn:aws:iam::788516091144:role/serverless-pipeline-ingest" -> null
+      - runtime                        = "nodejs24.x" -> null
+      - skip_destroy                   = false -> null
+      - source_code_hash               = "sF2rrV0beu71yyUuVaLxhGrsMKeXgZegjrhbt7QdfUw=" -> null
+      - source_code_size               = 1080 -> null
+      - tags                           = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-ingest"
+          - "Role"      = "ingest"
+        } -> null
+      - tags_all                       = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-ingest"
+          - "Role"      = "ingest"
+        } -> null
+      - timeout                        = 30 -> null
+      - version                        = "$LATEST" -> null
+
+      - environment {
+          - variables = {
+              - "QUEUE_URL" = "https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-main"
+            } -> null
+        }
+
+      - ephemeral_storage {
+          - size = 512 -> null
+        }
+
+      - logging_config {
+          - application_log_level = "INFO" -> null
+          - log_format            = "JSON" -> null
+          - log_group             = "/aws/lambda/serverless-pipeline-ingest" -> null
+          - system_log_level      = "INFO" -> null
+        }
+
+      - tracing_config {
+          - mode = "PassThrough" -> null
+        }
+    }
+
+  # aws_lambda_permission.s3_invoke will be destroyed
+  - resource "aws_lambda_permission" "s3_invoke" {
+      - action         = "lambda:InvokeFunction" -> null
+      - function_name  = "serverless-pipeline-ingest" -> null
+      - id             = "AllowS3Invoke" -> null
+      - principal      = "s3.amazonaws.com" -> null
+      - region         = "us-east-1" -> null
+      - source_account = "788516091144" -> null
+      - source_arn     = "arn:aws:s3:::serverless-pipeline-landing-788516091144" -> null
+      - statement_id   = "AllowS3Invoke" -> null
+    }
+
+  # aws_s3_bucket.landing will be destroyed
+  - resource "aws_s3_bucket" "landing" {
+      - arn                         = "arn:aws:s3:::serverless-pipeline-landing-788516091144" -> null
+      - bucket                      = "serverless-pipeline-landing-788516091144" -> null
+      - bucket_domain_name          = "serverless-pipeline-landing-788516091144.s3.amazonaws.com" -> null
+      - bucket_namespace            = "global" -> null
+      - bucket_region               = "us-east-1" -> null
+      - bucket_regional_domain_name = "serverless-pipeline-landing-788516091144.s3.us-east-1.amazonaws.com" -> null
+      - force_destroy               = true -> null
+      - hosted_zone_id              = "Z3AQBSTGFYJSTF" -> null
+      - id                          = "serverless-pipeline-landing-788516091144" -> null
+      - object_lock_enabled         = false -> null
+      - region                      = "us-east-1" -> null
+      - request_payer               = "BucketOwner" -> null
+      - tags                        = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-landing-788516091144"
+          - "Role"      = "landing"
+        } -> null
+      - tags_all                    = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-landing-788516091144"
+          - "Role"      = "landing"
+        } -> null
+
+      - grant {
+          - id          = "a36eaa010b952513b6b942c6a07360908702d2d749481739d1e4d45ec5f0d197" -> null
+          - permissions = [
+              - "FULL_CONTROL",
+            ] -> null
+          - type        = "CanonicalUser" -> null
+        }
+
+      - server_side_encryption_configuration {
+          - rule {
+              - bucket_key_enabled = false -> null
+
+              - apply_server_side_encryption_by_default {
+                  - sse_algorithm = "AES256" -> null
+                }
+            }
+        }
+
+      - versioning {
+          - enabled    = true -> null
+          - mfa_delete = false -> null
+        }
+    }
+
+  # aws_s3_bucket_notification.landing will be destroyed
+  - resource "aws_s3_bucket_notification" "landing" {
+      - bucket      = "serverless-pipeline-landing-788516091144" -> null
+      - eventbridge = false -> null
+      - id          = "serverless-pipeline-landing-788516091144" -> null
+      - region      = "us-east-1" -> null
+
+      - lambda_function {
+          - events              = [
+              - "s3:ObjectCreated:*",
+            ] -> null
+          - id                  = "tf-s3-lambda-20261107193953349000000001" -> null
+          - lambda_function_arn = "arn:aws:lambda:us-east-1:788516091144:function:serverless-pipeline-ingest" -> null
+        }
+    }
+
+  # aws_s3_bucket_public_access_block.landing will be destroyed
+  - resource "aws_s3_bucket_public_access_block" "landing" {
+      - block_public_acls       = true -> null
+      - block_public_policy     = true -> null
+      - bucket                  = "serverless-pipeline-landing-788516091144" -> null
+      - id                      = "serverless-pipeline-landing-788516091144" -> null
+      - ignore_public_acls      = true -> null
+      - region                  = "us-east-1" -> null
+      - restrict_public_buckets = true -> null
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.landing will be destroyed
+  - resource "aws_s3_bucket_server_side_encryption_configuration" "landing" {
+      - bucket = "serverless-pipeline-landing-788516091144" -> null
+      - id     = "serverless-pipeline-landing-788516091144" -> null
+      - region = "us-east-1" -> null
+
+      - rule {
+          - blocked_encryption_types = [
+              - "SSE-C",
+            ] -> null
+          - bucket_key_enabled       = false -> null
+
+          - apply_server_side_encryption_by_default {
+              - sse_algorithm = "AES256" -> null
+            }
+        }
+    }
+
+  # aws_s3_bucket_versioning.landing will be destroyed
+  - resource "aws_s3_bucket_versioning" "landing" {
+      - bucket = "serverless-pipeline-landing-788516091144" -> null
+      - id     = "serverless-pipeline-landing-788516091144" -> null
+      - region = "us-east-1" -> null
+
+      - versioning_configuration {
+          - mfa_delete = "Disabled" -> null
+          - status     = "Enabled" -> null
+        }
+    }
+
+  # aws_sqs_queue.dlq will be destroyed
+  - resource "aws_sqs_queue" "dlq" {
+      - arn                               = "arn:aws:sqs:us-east-1:788516091144:serverless-pipeline-dlq" -> null
+      - content_based_deduplication       = false -> null
+      - delay_seconds                     = 0 -> null
+      - fifo_queue                        = false -> null
+      - id                                = "https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-dlq" -> null
+      - kms_data_key_reuse_period_seconds = 300 -> null
+      - max_message_size                  = 262144 -> null
+      - message_retention_seconds         = 1209600 -> null
+      - name                              = "serverless-pipeline-dlq" -> null
+      - receive_wait_time_seconds         = 0 -> null
+      - region                            = "us-east-1" -> null
+      - sqs_managed_sse_enabled           = true -> null
+      - tags                              = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-dlq"
+          - "Role"      = "dead-letter"
+        } -> null
+      - tags_all                          = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-dlq"
+          - "Role"      = "dead-letter"
+        } -> null
+      - url                               = "https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-dlq" -> null
+      - visibility_timeout_seconds        = 30 -> null
+    }
+
+  # aws_sqs_queue.main will be destroyed
+  - resource "aws_sqs_queue" "main" {
+      - arn                               = "arn:aws:sqs:us-east-1:788516091144:serverless-pipeline-main" -> null
+      - content_based_deduplication       = false -> null
+      - delay_seconds                     = 0 -> null
+      - fifo_queue                        = false -> null
+      - id                                = "https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-main" -> null
+      - kms_data_key_reuse_period_seconds = 300 -> null
+      - max_message_size                  = 262144 -> null
+      - message_retention_seconds         = 345600 -> null
+      - name                              = "serverless-pipeline-main" -> null
+      - receive_wait_time_seconds         = 0 -> null
+      - redrive_policy                    = jsonencode(
+            {
+              - deadLetterTargetArn = "arn:aws:sqs:us-east-1:788516091144:serverless-pipeline-dlq"
+              - maxReceiveCount     = 5
+            }
+        ) -> null
+      - region                            = "us-east-1" -> null
+      - sqs_managed_sse_enabled           = true -> null
+      - tags                              = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-main"
+          - "Role"      = "queue"
+        } -> null
+      - tags_all                          = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "serverless-pipeline-main"
+          - "Role"      = "queue"
+        } -> null
+      - url                               = "https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-main" -> null
+      - visibility_timeout_seconds        = 180 -> null
+    }
+
+Plan: 0 to add, 0 to change, 19 to destroy.
+
+Changes to Outputs:
+  - consumer_function_name = "serverless-pipeline-consumer" -> null
+  - dlq_arn                = "arn:aws:sqs:us-east-1:788516091144:serverless-pipeline-dlq" -> null
+  - dlq_url                = "https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-dlq" -> null
+  - ingest_function_name   = "serverless-pipeline-ingest" -> null
+  - landing_bucket         = "serverless-pipeline-landing-788516091144" -> null
+  - main_queue_arn         = "arn:aws:sqs:us-east-1:788516091144:serverless-pipeline-main" -> null
+  - main_queue_url         = "https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-main" -> null
+  - table_name             = "serverless-pipeline-events" -> null
+aws_s3_bucket_public_access_block.landing: Destroying... [id=serverless-pipeline-landing-788516091144]
+aws_s3_bucket_notification.landing: Destroying... [id=serverless-pipeline-landing-788516091144]
+aws_iam_role_policy.ingest: Destroying... [id=serverless-pipeline-ingest:serverless-pipeline-ingest]
+aws_s3_bucket_versioning.landing: Destroying... [id=serverless-pipeline-landing-788516091144]
+aws_s3_bucket_server_side_encryption_configuration.landing: Destroying... [id=serverless-pipeline-landing-788516091144]
+aws_lambda_event_source_mapping.consumer: Destroying... [id=960ec0e2-772b-497d-8f69-629e9f310763]
+aws_budgets_budget.guard: Destroying... [id=788516091144:serverless-pipeline-guard]
+aws_iam_role_policy.ingest: Destruction complete after 0s
+aws_s3_bucket_versioning.landing: Destruction complete after 0s
+aws_budgets_budget.guard: Destruction complete after 0s
+aws_s3_bucket_notification.landing: Destruction complete after 1s
+aws_lambda_permission.s3_invoke: Destroying... [id=AllowS3Invoke]
+aws_lambda_permission.s3_invoke: Destruction complete after 0s
+aws_lambda_function.ingest: Destroying... [id=serverless-pipeline-ingest]
+aws_s3_bucket_server_side_encryption_configuration.landing: Destruction complete after 1s
+aws_s3_bucket_public_access_block.landing: Destruction complete after 1s
+aws_s3_bucket.landing: Destroying... [id=serverless-pipeline-landing-788516091144]
+aws_lambda_event_source_mapping.consumer: Destruction complete after 2s
+aws_lambda_function.consumer: Destroying... [id=serverless-pipeline-consumer]
+aws_s3_bucket.landing: Destruction complete after 2s
+aws_lambda_function.ingest: Destruction complete after 5s
+aws_cloudwatch_log_group.ingest: Destroying... [id=/aws/lambda/serverless-pipeline-ingest]
+aws_iam_role.ingest: Destroying... [id=serverless-pipeline-ingest]
+aws_iam_role.ingest: Destruction complete after 0s
+aws_cloudwatch_log_group.ingest: Destruction complete after 0s
+aws_lambda_function.consumer: Destruction complete after 5s
+aws_iam_role_policy.consumer: Destroying... [id=serverless-pipeline-consumer:serverless-pipeline-consumer]
+aws_iam_role_policy.consumer: Destruction complete after 0s
+aws_cloudwatch_log_group.consumer: Destroying... [id=/aws/lambda/serverless-pipeline-consumer]
+aws_sqs_queue.main: Destroying... [id=https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-main]
+aws_iam_role.consumer: Destroying... [id=serverless-pipeline-consumer]
+aws_dynamodb_table.events: Destroying... [id=serverless-pipeline-events]
+aws_cloudwatch_log_group.consumer: Destruction complete after 0s
+aws_iam_role.consumer: Destruction complete after 0s
+aws_dynamodb_table.events: Destruction complete after 7s
+aws_sqs_queue.main: Still destroying... [id=https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-main, 10s elapsed]
+aws_sqs_queue.main: Still destroying... [id=https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-main, 20s elapsed]
+aws_sqs_queue.main: Still destroying... [id=https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-main, 30s elapsed]
+aws_sqs_queue.main: Still destroying... [id=https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-main, 40s elapsed]
+aws_sqs_queue.main: Destruction complete after 43s
+aws_sqs_queue.dlq: Destroying... [id=https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-dlq]
+aws_sqs_queue.dlq: Still destroying... [id=https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-dlq, 10s elapsed]
+aws_sqs_queue.dlq: Still destroying... [id=https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-dlq, 20s elapsed]
+aws_sqs_queue.dlq: Still destroying... [id=https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-dlq, 30s elapsed]
+aws_sqs_queue.dlq: Still destroying... [id=https://sqs.us-east-1.amazonaws.com/788516091144/serverless-pipeline-dlq, 40s elapsed]
+aws_sqs_queue.dlq: Destruction complete after 42s
+
+Destroy complete! Resources: 19 destroyed.
