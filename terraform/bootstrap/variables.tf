@@ -24,7 +24,7 @@ variable "github_owner_id" {
 variable "github_repo" {
   description = "Repository name"
   type        = string
-  default     = "project-cloud_serverless-pipeline"
+  default     = "project-cloud_aws-serverless-pipeline"
 }
 
 variable "github_repo_id" {

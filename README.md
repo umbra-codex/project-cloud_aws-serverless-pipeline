@@ -1,6 +1,6 @@
 # serverless-pipeline
 
-[![ci](https://github.com/umbra-codex/project-cloud_serverless-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/umbra-codex/project-cloud_serverless-pipeline/actions/workflows/ci.yml)
+[![ci](https://github.com/umbra-codex/project-cloud_aws-serverless-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/umbra-codex/project-cloud_aws-serverless-pipeline/actions/workflows/ci.yml)
 
 One S3 object becomes one SQS message and then one DynamoDB row. I built it on AWS with OpenTofu and two Node 24 Lambdas, with CI that plans every pull request and every push to `main`, then ported the same design to a Compose stack with Redis Streams, a worker, and Postgres on my homelab. I start the Compose stack on demand for a walkthrough, so it has no public link.
 
@@ -70,8 +70,8 @@ The AWS latency includes the wait in the queue. Rows arrived over about 40 secon
 
 ## Proof It Works
 
-- the [passing CI run](https://github.com/umbra-codex/project-cloud_serverless-pipeline/actions/runs/42747746965) that finished the work, including its `static` job
-- the [failure drill capture](https://github.com/umbra-codex/project-cloud_serverless-pipeline/releases/tag/drill-capture), a Release asset: 63 seconds, edited from two takes, with the waits sped up and labeled on screen
+- the [passing CI run](https://github.com/umbra-codex/project-cloud_aws-serverless-pipeline/actions/runs/42747746965) that finished the work, including its `static` job
+- the [failure drill capture](https://github.com/umbra-codex/project-cloud_aws-serverless-pipeline/releases/tag/drill-capture), a Release asset: 63 seconds, edited from two takes, with the waits sped up and labeled on screen
 - [`evidence/README.md`](evidence/README.md), the index of everything captured: the 1,000 latencies for each runtime, the raw AWS rows behind its p50 and p95, the Cost Explorer readings, the destroy log, and the Terraform state taken before the destroy
 
 CI runs `tofu plan` over OIDC on every pull request and push to `main` and never applies, so a passing run shows that the configuration is valid, not that anything is deployed.
