@@ -1,9 +1,12 @@
 name: ci
 
+# The whole check, on every push and every pull request, with no cloud account:
+# the plan tests use a mocked provider, and the handler tests use stub clients.
+# The `plan` job is the only one that holds an identity, and it skips itself
+# when no role is configured.
 on:
-  pull_request:
   push:
-    branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -14,8 +17,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Everything that only reads the repository. No cloud identity lives in this
+  # job, because tflint and checkov are third-party code.
   static:
-    name: static
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -24,23 +28,43 @@ jobs:
         with:
           tofu_version: 1.13.1
 
-      - run: tofu fmt -check -recursive
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
 
-      - name: Validate
+      - name: Formatting
+        run: tofu fmt -check -recursive
+
+      # The backend is not read here: this job has no identity, and validate
+      # does not need state.
+      - name: Init and validate
         run: |
           tofu -chdir=terraform init -backend=false -input=false
           tofu -chdir=terraform validate -no-color
+
+      # The product's own tests. The plan tests assert the infrastructure, and
+      # the handler tests assert the two functions, both without an account.
+      - name: Plan tests
+        run: tofu -chdir=terraform test -no-color -test-directory=../tests
+
+      - name: Bootstrap plan tests
+        run: |
+          tofu -chdir=terraform/bootstrap init -backend=false -input=false
+          tofu -chdir=terraform/bootstrap test -no-color
+
+      - name: Handler tests
+        run: bun test ./tests
 
       - uses: terraform-linters/setup-tflint@v6
         with:
           tflint_version: v0.64.0
 
       - name: tflint
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           tflint --init
           tflint --recursive --config "$(pwd)/.tflint.hcl"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: bridgecrewio/checkov-action@v12.2915.0
         with:
@@ -48,9 +72,13 @@ jobs:
           framework: terraform
           soft_fail: false
 
+  # The only job that holds a cloud identity, exchanged through GitHub OIDC.
+  # There are no access keys in this repository. The role trusts only pull
+  # requests and `main`, so the job runs only for those, and it skips itself when
+  # the AWS_CI_ROLE_ARN variable is empty.
   plan:
-    name: plan
     needs: static
+    if: vars.AWS_CI_ROLE_ARN != '' && (github.event_name == 'pull_request' || github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -68,11 +96,13 @@ jobs:
         with:
           node-version: 24
 
-      - name: Build Lambda bundles
+      # archive_file zips src/<function>/dist, so every bundle must be built
+      # before plan runs. The loop skips a folder that has no package.json.
+      - name: Build the Lambda bundles
         run: |
-          for dir in src/*/; do
-            [ -f "$dir/package.json" ] || continue
-            ( cd "$dir" && npm ci && npm run build )
+          for d in src/*/; do
+            [ -f "$d/package.json" ] || continue
+            (cd "$d" && npm ci && npm run build)
           done
 
       - uses: aws-actions/configure-aws-credentials@v4
@@ -81,5 +111,4 @@ jobs:
           aws-region: us-east-1
 
       - run: tofu -chdir=terraform init
-
       - run: tofu -chdir=terraform plan -no-color -input=false

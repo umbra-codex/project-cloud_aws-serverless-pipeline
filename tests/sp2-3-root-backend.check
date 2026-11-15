@@ -1,6 +1,0 @@
-# SP2 step 3: the pipeline configuration points at the same bucket, under its
-# own key.
-# Format: file | regular expression the file must contain | message if it doesn't
-terraform/backend.tf | ^[[:space:]]*backend "s3" \{ | the root config needs the backend
-terraform/backend.tf | ^[[:space:]]*key[[:space:]]*=[[:space:]]*"serverless-pipeline/terraform\.tfstate"$ | the pipeline's own key, which keeps the two stacks apart
-terraform/backend.tf | ^[[:space:]]*use_lockfile[[:space:]]*=[[:space:]]*true$ | native locking here too
