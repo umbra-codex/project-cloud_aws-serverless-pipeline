@@ -73,11 +73,12 @@ jobs:
           soft_fail: false
 
   # The only job that holds a cloud identity, exchanged through GitHub OIDC.
-  # There are no access keys in this repository. The job skips itself when the
-  # AWS_CI_ROLE_ARN variable is empty.
+  # There are no access keys in this repository. The role trusts only pull
+  # requests and `main`, so the job runs only for those, and it skips itself when
+  # the AWS_CI_ROLE_ARN variable is empty.
   plan:
     needs: static
-    if: vars.AWS_CI_ROLE_ARN != ''
+    if: vars.AWS_CI_ROLE_ARN != '' && (github.event_name == 'pull_request' || github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     permissions:
       id-token: write
