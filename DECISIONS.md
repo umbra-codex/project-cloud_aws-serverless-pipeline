@@ -2,3 +2,14 @@
 - 2026-10-25 SP4: two workflows, because the step tests need Bun and any branch, while the plan needs an identity
 - 2026-11-08 SP13: AWS benchmark, 1,000 events, p50 21.38 s, p95 43.71 s, includes the queue wait; cost per 1,000 is 0.0071 USD (DynamoDB + S3, 2026-11-07 to 2026-11-08, credits excluded), from evidence/cost-explorer.txt
 - 2026-11-08 SP13: Compose benchmark, 1,000 events, p50 0.93 ms, p95 1.42 ms, a floor because requests were sent one at a time; 0 USD of cloud spend
+- 2026-10-25: chose OIDC from GitHub Actions over stored access keys because no long-lived credential exists to leak, and the trust policy names one repository and two contexts.
+- 2026-10-25: chose two workflows over one because the step tests need Bun on any branch, while the plan needs an identity.
+- 2026-10-29: chose a dead-letter queue with `maxReceiveCount = 5` over unlimited retries because a message that fails every time has to stop somewhere a person can read it.
+- 2026-10-29: chose a standard queue over FIFO because order is not part of the contract, and the idempotency key already makes a duplicate harmless.
+- 2026-10-30: chose `maximum_concurrency = 2` on the mapping over a reserved concurrency per function because the account's Lambda limit was 10, and AWS needs 100 unreserved units before any reservation.
+- 2026-10-30: chose an alert-only budget of 1 USD, credits excluded, over treating it as a limit because it reports spend up to a day late and cannot stop anything.
+- 2026-10-31: chose a conditional write on `idempotency_key` over deduplicating in the queue because SQS delivers at least once.
+- 2026-10-31: chose `ReportBatchItemFailures` over failing the whole batch because one bad message should not send nine good ones back to the queue.
+- 2026-11-01: chose a Compose port with Redis Streams and Postgres over keeping the AWS stack running because the AWS stack was always going to be destroyed and would leave nothing to demo, and Compose is the version that costs nothing in cloud spend.
+- 2026-11-07: chose a reserved concurrency of 5 on each function over leaving it off because AWS had raised the account's Lambda limit to 1000 and the mapping cap bounds only the consumer.
+- 2026-11-08: chose to report AWS latency from landing to row, queue wait included, over a per-invocation duration because the product is a row and not a function call.

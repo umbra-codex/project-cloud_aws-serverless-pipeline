@@ -16,3 +16,49 @@ Total: 0.038154964 USD
 
 Not from this stack: EC2-Instances, VPC, and EC2-Other. terraform/ defines no EC2 or VPC resources, so those three lines come from something else in the same account. They stay in the total above because the view shows the whole account.
 This stack: DynamoDB + S3 = 0.007077244 USD for the two days, about 0.0071 USD per 1,000 events. That is a two-day figure, not only the benchmark window, and the benchmark sent 1,000 events.
+
+Second reading: 2026-11-07 to 2026-11-14, the whole time the stack was applied. Taken 2026-11-15 with the AWS CLI. One Monthly bucket for the range, unblended cost, grouped by service, filtered to RECORD_TYPE = Usage, so credits are excluded. The CLI end date is exclusive, so End=2026-11-15 includes 2026-11-14.
+
+aws ce get-cost-and-usage --time-period Start=2026-11-07,End=2026-11-15 --granularity MONTHLY --metrics UnblendedCost --filter '{"Dimensions":{"Key":"RECORD_TYPE","Values":["Usage"]}}' --group-by Type=DIMENSION,Key=SERVICE --query 'ResultsByTime[].Groups[].[Keys[0],Metrics.UnblendedCost.Amount]' --output text
+
+AWS Glue: 0 USD
+AWS Key Management Service: 0 USD
+AWS Lambda: 0 USD
+Amazon DynamoDB: 0.0006835057 USD
+EC2 - Other: 0.3418594881 USD
+Amazon Elastic Compute Cloud - Compute: 0.2880973264 USD
+Amazon Simple Queue Service: 0 USD
+Amazon Simple Storage Service: 0.0072726539 USD
+Amazon Virtual Private Cloud: 0.13864028 USD
+AmazonCloudWatch: 0 USD
+CloudFront Flat-Rate Plans: 0 USD
+Total: 0.7765532541 USD
+
+Same filter, DAILY granularity, total only:
+
+2026-11-07: 0.0007626545 USD
+2026-11-08: 0.0373923095 USD
+2026-11-09: 0.3909934953 USD
+2026-11-10: 0.0908740514 USD
+2026-11-11: 0.0640009907 USD
+2026-11-12: 0.0640010353 USD
+2026-11-13: 0.0640175701 USD
+2026-11-14: 0.0645111473 USD
+
+This stack: DynamoDB + S3 = 0.0079561596 USD for the eight days. Lambda, SQS, KMS, CloudWatch, and Glue read 0 USD. Of that, 0.007077244 USD fell on 2026-11-07 to 2026-11-08, the window of the first reading and the source of the per-1,000 figure. The six later days added about 0.0009 USD. That figure is not split by what ran on the stack on those days.
+Not from this stack: EC2 - Other, Amazon Elastic Compute Cloud - Compute, and Amazon Virtual Private Cloud, together 0.7685970945 USD. terraform/ defines no EC2 or VPC resources, so those lines come from other services running in the same account. Most of that cost fell on 2026-11-09, a day the account was used for other work.
+
+Third reading: this stack only, per day. Same dates and the same Usage filter, narrowed to the four services the stack uses (Amazon DynamoDB, Amazon Simple Storage Service, AWS Lambda, Amazon Simple Queue Service), DAILY granularity, total per day. Lambda and SQS read 0 USD in the second reading, so these figures are DynamoDB plus S3.
+
+aws ce get-cost-and-usage --time-period Start=2026-11-07,End=2026-11-15 --granularity DAILY --metrics UnblendedCost --filter '{"And":[{"Dimensions":{"Key":"RECORD_TYPE","Values":["Usage"]}},{"Dimensions":{"Key":"SERVICE","Values":["Amazon DynamoDB","Amazon Simple Storage Service","AWS Lambda","Amazon Simple Queue Service"]}}]}' --query 'ResultsByTime[].[TimePeriod.Start,Total.UnblendedCost.Amount]' --output text
+
+2026-11-07: 0.0007626545 USD
+2026-11-08: 0.0063145895 USD
+2026-11-09: 0.000060148 USD
+2026-11-10: 0.0002879986 USD
+2026-11-11: 0.0000009971 USD
+2026-11-12: 0.0000010417 USD
+2026-11-13: 0.0000175765 USD
+2026-11-14: 0.0005111537 USD
+
+Sum of the eight days: 0.0079561596 USD, the same as the second reading. 2026-11-07 and 2026-11-08 sum to 0.007077244 USD, the first reading and the per-1,000 figure. The six later days sum to 0.0008789156 USD. The days are not split by what ran on the stack.

@@ -12,5 +12,5 @@ Every file here is text, JSON, or a log. The screen capture of the failure drill
 | `bench-aws-summary.txt` | The AWS p50 and p95, which include the queue wait |
 | `bench-compose-latencies.txt` | The Compose latency for each event, one per line |
 | `bench-compose-summary.txt` | The Compose p50 and p95, a floor because requests were sent one at a time |
-| `cost-explorer.txt` | The AWS Cost Explorer view with credits excluded, and the stack's cost per 1,000 events |
+| `cost-explorer.txt` | Three AWS Cost Explorer readings with credits excluded: the first two days, the whole run, and the stack's services by day. It also holds the stack's cost per 1,000 events |
 | `sp8-throttling.txt` | What the concurrency caps did to the queue during the burst |
