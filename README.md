@@ -1,4 +1,4 @@
-# serverless-pipeline
+# aws-serverless-pipeline
 
 [![ci](https://github.com/umbra-codex/project-cloud_aws-serverless-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/umbra-codex/project-cloud_aws-serverless-pipeline/actions/workflows/ci.yml)
 
